@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.ember24.gotoview.Interface.GotoAttributes;
 import com.ember24.gotoview.R;
 
 import java.util.ArrayList;
@@ -20,13 +23,13 @@ import java.util.List;
  * Created by Ikraam on 04/03/2017.
  */
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionViewHolder> {
-    private List<SectionItem> mDataArray;
+    private List<SectionItem> sections;
     private OnItemClickListener listener;
-    private Context mContext;
+    private GotoAttributes attr;
 
-    public SectionAdapter(Context context, List<SectionItem> dataSet) {
-        this.mContext = context;
-        this.mDataArray =  dataSet == null ? new ArrayList<SectionItem>() : dataSet;
+    public SectionAdapter(List<SectionItem> dataSet,GotoAttributes attr) {
+        this.sections =  dataSet == null ? new ArrayList<SectionItem>() : dataSet;
+        this.attr = attr;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -34,15 +37,18 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
     }
 
     public void refreshDataChange(List<SectionItem> dataSet) {
-        this.mDataArray = dataSet == null ? new ArrayList<SectionItem>() : dataSet;
+        if (dataSet == null)
+            sections.clear();
+        else
+            sections = dataSet;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mDataArray == null)
+        if (sections == null)
             return 0;
-        return mDataArray.size();
+        return sections.size();
     }
 
     @Override
@@ -52,7 +58,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
 
     @Override
     public void onBindViewHolder(SectionViewHolder holder, int position) {
-        holder.bind(mDataArray.get(position), position);
+        holder.bind(sections.get(position), position);
     }
 
     public interface OnItemClickListener {
@@ -71,19 +77,15 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
             if (item == null || item.getSection() == null)
                 return;
 
-            TypedValue typedValue = new TypedValue();
-            mContext.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-            int color = typedValue.data;
-
             GradientDrawable bgShape = (GradientDrawable) txtSection.getBackground();
-            bgShape.setCornerRadius(50f);
+            bgShape.setCornerRadius(attr.getRadius());
             if (item.getColor() == -1) {
-                bgShape.setColor(item.isActive() ? color : Color.TRANSPARENT);
-                bgShape.setStroke(3, color);
-                txtSection.setTextColor(item.isActive() ? Color.WHITE : color);
+                bgShape.setColor(item.isActive() ? attr.getColor() : Color.TRANSPARENT);
+                bgShape.setStroke(attr.getStroke(), attr.getColor());
+                txtSection.setTextColor(item.isActive() ? Color.WHITE : attr.getTextColor());
             } else {
                 bgShape.setColor(item.isActive() ? item.getColor() : Color.TRANSPARENT);
-                bgShape.setStroke(3, item.getColor());
+                bgShape.setStroke(attr.getStroke(), item.getColor());
                 txtSection.setTextColor(item.isActive() ? Color.WHITE : item.getColor());
             }
 

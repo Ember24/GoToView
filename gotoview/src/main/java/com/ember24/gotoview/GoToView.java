@@ -1,11 +1,16 @@
 package com.ember24.gotoview;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
@@ -13,6 +18,7 @@ import com.ember24.gotoview.Adapter.SectionAdapter;
 import com.ember24.gotoview.Adapter.SectionItem;
 import com.ember24.gotoview.Helper.RecyclerViewPositionHelper;
 import com.ember24.gotoview.Helper.SavedState;
+import com.ember24.gotoview.Interface.GotoAttributes;
 import com.ember24.gotoview.Interface.GotoSection;
 
 import java.util.List;
@@ -20,61 +26,141 @@ import java.util.List;
 /**
  * Created by Ikraam on 04/03/2017.
  */
-public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickListener {
+public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickListener,GotoAttributes {
 
-    private RecyclerView recyclerView;
+    private RecyclerView rvAttached;
     private RecyclerViewPositionHelper rvHelper;
-    private int position = 0;
+    private int rvPosition = 0;
+    private int gotoPosition = 0;
     private List<SectionItem> sections;
     private RecyclerView gotoRecyclerView;
     private SectionAdapter sectiondAdapter;
     private boolean isInitialized = false;
 
-    public GoToView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
+    private float mRadius;
+    private int mStroke;
+    private @ColorInt int mColor;
+    private @ColorInt int mTextColor;
+    private @ColorInt int mSelectedColor;
+    private @ColorInt int mSelectedTextColor;
+
+    public GoToView(Context context) {
+        this(context, null);
+    }
+
+    public GoToView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public GoToView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initialiseView(context);
+        init(context, attrs, defStyleAttr);
     }
 
-    public GoToView(final Context context) {
-        super(context);
-        initialiseView(context);
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public GoToView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs, defStyleAttr);
     }
 
-    public GoToView(final Context context, final AttributeSet attrs) {
-        super(context, attrs);
-        initialiseView(context);
-    }
+    protected void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        if (!isInitialized) {
+            setClipChildren(false);
+            View.inflate(context, R.layout.goto_list, this);
 
-    protected void initialiseView(Context context) {
-        if (isInitialized) {
-            return;
+            gotoRecyclerView = (RecyclerView) findViewById(R.id.gotoRecycler);
+            gotoRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            isInitialized = true;
         }
 
-        isInitialized = true;
-        setClipChildren(false);
-        View.inflate(context, R.layout.goto_list, this);
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int colorPrimary = typedValue.data;
 
-        gotoRecyclerView = (RecyclerView) findViewById(R.id.gotoRecycler);
-        gotoRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.GotoView, defStyleAttr, 0);
+        mRadius = attr.getFloat(R.styleable.GotoView_goto_radius, 50f);
+        mStroke = attr.getInteger(R.styleable.GotoView_goto_stroke, 3);
+        mColor = attr.getColor(R.styleable.GotoView_goto_color, colorPrimary);
+        mSelectedColor = attr.getColor(R.styleable.GotoView_goto_SelectedColor, colorPrimary);
+        mTextColor = attr.getColor(R.styleable.GotoView_goto_textColor, mColor);
+        mSelectedTextColor = attr.getColor(R.styleable.GotoView_goto_textSelectedColor, mSelectedColor);
+
+        attr.recycle();
     }
 
     @Override
-    public void OnItemClicked(int sectionPosition, int position) {
-        this.position = sectionPosition;
-        performSelectedSection(position);
-        scrollToSectionPosition(sectionPosition);
+    public float getRadius() {
+        return mRadius;
+    }
+
+    public void setRadius(float radius) {
+        this.mRadius = radius;
+    }
+
+    @Override
+    public int getStroke() {
+        return mStroke;
+    }
+
+    public void setStroke(int stroke) {
+        this.mStroke = stroke;
+        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getColor() {
+        return mColor;
+    }
+
+    public void setColor(int color) {
+        this.mColor = color;
+        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getTextColor() {
+        return mTextColor;
+    }
+
+    public void setTextColor(int textColor) {
+        this.mTextColor = textColor;
+        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getSelectedColor() {
+        return mSelectedColor;
+    }
+
+    public void setSelectedColor(int selectedColor) {
+        this.mSelectedColor = selectedColor;
+        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getSelectedTextColor() {
+        return mSelectedTextColor;
+    }
+
+    public void setSelectedTextColor(int selectedTextColor) {
+        this.mSelectedTextColor = selectedTextColor;
+        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    public int getPosition() {
+        return gotoPosition;
     }
 
     public void setRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-        this.rvHelper = RecyclerViewPositionHelper.createHelper(this.recyclerView);
-        this.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        this.rvAttached = recyclerView;
+        this.rvHelper = RecyclerViewPositionHelper.createHelper(this.rvAttached);
+        this.rvAttached.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
                 if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
                     return;
                 }
-                setGotoPosition(rvHelper.findFirstCompletelyVisibleItemPosition());
+                setRecyclerViewPosition(rvHelper.findFirstCompletelyVisibleItemPosition());
             }
 
             @Override
@@ -83,7 +169,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
             }
         });
 
-        RecyclerView.Adapter adapter = this.recyclerView.getAdapter();
+        RecyclerView.Adapter adapter = this.rvAttached.getAdapter();
         if (adapter != null && adapter instanceof GotoSection) {
             setGotoSectionAdapter((GotoSection) adapter);
         }
@@ -91,59 +177,59 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
 
     public void setGotoSectionAdapter(GotoSection gotoSection) {
         sections = gotoSection.getSections();
-        if (sections == null || sections.size() <= 0)
-            return;
-
-        sectiondAdapter = new SectionAdapter(getContext(), sections);
+        sectiondAdapter = new SectionAdapter(sections,this);
         sectiondAdapter.setOnItemClickListener(this);
         gotoRecyclerView.setAdapter(sectiondAdapter);
-        setGotoPosition(position);
+        setRecyclerViewPosition(rvPosition);
     }
 
     public void refresh(GotoSection gotoSection) {
         sections = gotoSection.getSections();
         sectiondAdapter.refreshDataChange(sections);
-        setGotoPosition(position);
+        setRecyclerViewPosition(rvPosition);
     }
 
-    private void setGotoPosition(int position) {
-        if (recyclerView != null) {
-            this.position = position;
-            final int itemsCount = (recyclerView.getAdapter()).getItemCount();
-            if (itemsCount > 0 && position >= itemsCount)
-                this.position = (itemsCount - 1);
-            else if (itemsCount == 0)
-                this.position = 0;
+    @Override
+    public void OnItemClicked(int sectionPosition, int position) {
+        this.gotoPosition = position;
+        performSelectedSection();
+        scrollToSectionPosition(sectionPosition);
+    }
 
-            final String sectionName = ((GotoSection) recyclerView.getAdapter()).getCurrentSection(this.position);
+    private void setRecyclerViewPosition(int position) {
+        if (rvAttached != null) {
+            this.rvPosition = position;
+            final int itemsCount = (rvAttached.getAdapter()).getItemCount();
+            if (itemsCount > 0 && this.rvPosition >= itemsCount)
+                this.rvPosition = (itemsCount - 1);
+            else if (itemsCount == 0)
+                this.rvPosition = 0;
+
+            final String sectionName = ((GotoSection) rvAttached.getAdapter()).getCurrentSection(this.rvPosition);
             setSectionSelected(sectionName);
         }
     }
 
-    private void performSelectedSection(int position) {
-        if (position < 0 || position >= sections.size()) {
-            return;
-        }
-
+    private void performSelectedSection() {
         for (SectionItem item : sections) {
             item.setActive(false);
         }
 
-        sections.get(position).setActive(true);
+        sections.get(gotoPosition).setActive(true);
         sectiondAdapter.refreshDataChange(sections);
     }
 
     private void scrollToSectionPosition(int position) {
-        if (recyclerView == null || recyclerView.getAdapter() == null) {
+        if (rvAttached == null || rvAttached.getAdapter() == null) {
             return;
         }
 
-        int count = recyclerView.getAdapter().getItemCount();
+        int count = rvAttached.getAdapter().getItemCount();
         if (position < 0 || position > count) {
             return;
         }
 
-        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+        ((LinearLayoutManager) rvAttached.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 
     private void setSectionSelected(String sectionName) {
@@ -157,8 +243,9 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
                 continue;
             }
 
-            if (sectionItem.getSection().trim().equalsIgnoreCase(sectionName)) {
-                performSelectedSection(i);
+            if (sectionItem.getSection().equalsIgnoreCase(sectionName)) {
+                this.gotoPosition = i;
+                performSelectedSection();
                 gotoRecyclerView.smoothScrollToPosition(i);
                 break;
             }
@@ -178,7 +265,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         super.onRestoreInstanceState(state);
         if(state != null && state instanceof SavedState){
             int position = ((SavedState) state).mScrollPosition;
-            setGotoPosition(position);
+            setRecyclerViewPosition(position);
         }
     }
 
