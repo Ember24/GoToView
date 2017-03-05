@@ -1,0 +1,25 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    buildTypes {
+        compileSdkVersion 25
+        buildToolsVersion "24.0.2"
+        defaultConfig {
+            applicationId "com.ember24.gotolibrary"
+            minSdkVersion 15
+            targetSdkVersion 25
+            versionCode 1
+            versionName "1.0"
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile project(':gotoview')
+}

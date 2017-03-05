@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'goto-view'
+
+    publishedGroupId = 'com.ember24.gotoview'
+    libraryName = 'Goto View'
+    artifact = 'Goto'
+
+    libraryDescription = 'Go to sections of your recycler view faster'
+
+    siteUrl = 'www.ember24.xyz'
+    gitUrl = 'https://github.com/Ember24/GoToView'
+
+    libraryVersion = rootProject.versionName
+
+    developerId = ''
+    developerName = 'Ikraam Moothian Pillay'
+    developerEmail = 'ember24x@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+group = publishedGroupId
+version = libraryVersion
+
+dependencies {
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:recyclerview-v7:$supportVersion"
+}
