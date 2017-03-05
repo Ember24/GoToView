@@ -77,17 +77,17 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
             if (item == null || item.getSection() == null)
                 return;
 
+            int color = item.getColor() != SectionItem.NO_COLOR_OVERRIDE ? item.getColor() : attr.getColor();
+            int selectedColor = item.getSelectedColor() != SectionItem.NO_COLOR_OVERRIDE ? item.getSelectedColor() : attr.getSelectedColor();
+            int textColor = item.getTextColor() != SectionItem.NO_COLOR_OVERRIDE ? item.getTextColor() : attr.getTextColor();
+            int textSelectedColor = item.getTextSelectedColor() != SectionItem.NO_COLOR_OVERRIDE ? item.getTextSelectedColor() : attr.getTextSelectedColor();
+
             GradientDrawable bgShape = (GradientDrawable) txtSection.getBackground();
             bgShape.setCornerRadius(attr.getRadius());
-            if (item.getColor() == -1) {
-                bgShape.setColor(item.isActive() ? attr.getColor() : Color.TRANSPARENT);
-                bgShape.setStroke(attr.getStroke(), attr.getColor());
-                txtSection.setTextColor(item.isActive() ? Color.WHITE : attr.getTextColor());
-            } else {
-                bgShape.setColor(item.isActive() ? item.getColor() : Color.TRANSPARENT);
-                bgShape.setStroke(attr.getStroke(), item.getColor());
-                txtSection.setTextColor(item.isActive() ? Color.WHITE : item.getColor());
-            }
+            bgShape.setColor(item.isActive() ? selectedColor : Color.TRANSPARENT);
+            bgShape.setStroke(attr.getStroke(), item.isActive() ? selectedColor : color);
+            txtSection.setTextColor(item.isActive() ? textSelectedColor : textColor);
+            txtSection.setTextSize(TypedValue.COMPLEX_UNIT_PX,attr.getTextSize());
 
             txtSection.setText(item.getSection());
             txtSection.setTypeface(null, item.isActive() ? Typeface.BOLD : Typeface.NORMAL);

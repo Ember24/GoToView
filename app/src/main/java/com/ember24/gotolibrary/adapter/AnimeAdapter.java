@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ember24.gotolibrary.ColorHelper;
 import com.ember24.gotolibrary.R;
 import com.ember24.gotoview.Adapter.SectionItem;
 import com.ember24.gotoview.Interface.GotoSection;
@@ -61,9 +62,8 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharact
         for (int i = 0; i < dataArray.size(); i++) {
             if(!sectionName.equalsIgnoreCase(dataArray.get(i).movie)) {
                 sectionName = dataArray.get(i).movie;
-                sections.add(new SectionItem(sectionName, i));
-                //Get Random Color for each sections
-                //sections.add(new SectionItem(sectionName, i,getRandomColor()));
+                SectionItem item = new SectionItem(sectionName, i);
+                sections.add(item);
             }
         }
 
@@ -80,11 +80,6 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharact
             return null;
 
         return dataArray.get(pos).movie;
-    }
-
-    private int getRandomColor() {
-        Random rnd = new Random();
-        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
     class MovieCharacterViewHolder extends RecyclerView.ViewHolder {

@@ -3,6 +3,7 @@ package com.ember24.gotoview;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -38,11 +39,12 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     private boolean isInitialized = false;
 
     private float mRadius;
+    private int mTextSize;
     private int mStroke;
     private @ColorInt int mColor;
     private @ColorInt int mTextColor;
     private @ColorInt int mSelectedColor;
-    private @ColorInt int mSelectedTextColor;
+    private @ColorInt int mTextSelectedColor;
 
     public GoToView(Context context) {
         this(context, null);
@@ -81,9 +83,10 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         mRadius = attr.getFloat(R.styleable.GotoView_goto_radius, 50f);
         mStroke = attr.getInteger(R.styleable.GotoView_goto_stroke, 3);
         mColor = attr.getColor(R.styleable.GotoView_goto_color, colorPrimary);
-        mSelectedColor = attr.getColor(R.styleable.GotoView_goto_SelectedColor, colorPrimary);
+        mSelectedColor = attr.getColor(R.styleable.GotoView_goto_selectedColor, mColor);
         mTextColor = attr.getColor(R.styleable.GotoView_goto_textColor, mColor);
-        mSelectedTextColor = attr.getColor(R.styleable.GotoView_goto_textSelectedColor, mSelectedColor);
+        mTextSelectedColor = attr.getColor(R.styleable.GotoView_goto_textSelectedColor, Color.WHITE);
+        mTextSize = context.getResources().getDimensionPixelSize(R.dimen.material_text_body);
 
         attr.recycle();
     }
@@ -138,13 +141,18 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     }
 
     @Override
-    public int getSelectedTextColor() {
-        return mSelectedTextColor;
+    public int getTextSelectedColor() {
+        return mTextSelectedColor;
     }
 
-    public void setSelectedTextColor(int selectedTextColor) {
-        this.mSelectedTextColor = selectedTextColor;
+    public void setTextSelectedColor(int textSelectedColor) {
+        this.mTextSelectedColor = textSelectedColor;
         if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getTextSize() {
+        return mTextSize;
     }
 
     public int getPosition() {
@@ -187,6 +195,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         sections = gotoSection.getSections();
         sectiondAdapter.refreshDataChange(sections);
         setRecyclerViewPosition(rvPosition);
+        gotoRecyclerView.refreshDrawableState();
     }
 
     @Override

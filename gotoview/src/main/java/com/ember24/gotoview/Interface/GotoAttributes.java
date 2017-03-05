@@ -12,5 +12,6 @@ public interface GotoAttributes {
     @ColorInt int getColor();
     @ColorInt  int getTextColor();
     @ColorInt int getSelectedColor();
-    @ColorInt int getSelectedTextColor();
+    @ColorInt int getTextSelectedColor();
+    int getTextSize();
 }

@@ -5,7 +5,7 @@
                 <attr name="goto_stroke" format="integer"/>
                 <attr name="goto_color" format="color"/>
                 <attr name="goto_textColor" format="color"/>
-                <attr name="goto_SelectedColor" format="color"/>
+                <attr name="goto_selectedColor" format="color"/>
                 <attr name="goto_textSelectedColor" format="color"/>
         </declare-styleable>
 </resources>

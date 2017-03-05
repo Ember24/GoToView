@@ -7,25 +7,37 @@ import android.support.annotation.ColorInt;
  */
 
 public class SectionItem {
+    public static final int NO_COLOR_OVERRIDE = -1;
     private String section;
     private int position;
     private boolean isActive;
-    @ColorInt
-    private int color;
+
+    @ColorInt private int color;
+    @ColorInt private int selectedColor;
+    @ColorInt private int textColor;
+    @ColorInt private int textSelectedColor;
 
     public SectionItem(String section, int position)
     {
         this.section = section;
         this.position = position;
         this.isActive = false;
-        this.color = -1;
+        this.color = NO_COLOR_OVERRIDE;
+        this.selectedColor = NO_COLOR_OVERRIDE;
+        this.textColor = NO_COLOR_OVERRIDE;
+        this.textSelectedColor = NO_COLOR_OVERRIDE;
     }
 
-    public SectionItem(String section, int position, @ColorInt int color)
+    public SectionItem(String section, int position,
+                       @ColorInt int color,@ColorInt int selectedColor,
+                       @ColorInt int textColor,@ColorInt int textSelectedColor)
     {
         this.section = section;
         this.position = position;
         this.color = color;
+        this.selectedColor = selectedColor;
+        this.textColor = textColor;
+        this.textSelectedColor = textSelectedColor;
         this.isActive = false;
     }
 
@@ -60,5 +72,32 @@ public class SectionItem {
 
     public void setColor(@ColorInt int color) {
         this.color = color;
+    }
+
+    @ColorInt
+    public int getSelectedColor() {
+        return selectedColor;
+    }
+
+    public void setSelectedColor(@ColorInt int selectedColor) {
+        this.selectedColor = selectedColor;
+    }
+
+    @ColorInt
+    public int getTextSelectedColor() {
+        return textSelectedColor;
+    }
+
+    public void setTextSelectedColor(@ColorInt int textSelectedColor) {
+        this.textSelectedColor = textSelectedColor;
+    }
+
+    @ColorInt
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(@ColorInt int textColor) {
+        this.textColor = textColor;
     }
 }

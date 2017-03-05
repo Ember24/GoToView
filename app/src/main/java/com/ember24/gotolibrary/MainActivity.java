@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "New section added", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fabRemove:
-                adapter.refreshAdapter(removeSection(false));
+                adapter.refreshAdapter(removeSection(true));
                 goToView.refresh(adapter);
 
                 Toast.makeText(this, "Last section removed", Toast.LENGTH_SHORT).show();
