@@ -44,11 +44,6 @@ How to use
         public String getCurrentSection(int pos) {
             if (pos < 0 || pos >= dataArray.size())
                 return null;
-
-            AnimeData data = dataArray.get(pos);
-            if (data == null)
-                return null;
-
             return dataArray.get(pos).movie;
         }
     }
