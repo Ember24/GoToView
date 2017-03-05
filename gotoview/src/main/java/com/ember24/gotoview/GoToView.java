@@ -24,6 +24,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
 
     private RecyclerView recyclerView;
     private RecyclerViewPositionHelper rvHelper;
+    private int position = 0;
     private List<SectionItem> sections;
     private RecyclerView gotoRecyclerView;
     private SectionAdapter sectiondAdapter;
@@ -59,6 +60,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
 
     @Override
     public void OnItemClicked(int sectionPosition, int position) {
+        this.position = sectionPosition;
         performSelectedSection(position);
         scrollToSectionPosition(sectionPosition);
     }
@@ -72,7 +74,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
                 if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
                     return;
                 }
-                setRecyclerViewPosition(rvHelper.findFirstCompletelyVisibleItemPosition());
+                setGotoPosition(rvHelper.findFirstCompletelyVisibleItemPosition());
             }
 
             @Override
@@ -87,21 +89,33 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         }
     }
 
-    public void setGotoSectionAdapter(GotoSection sectionAdapter) {
-        List<SectionItem> items = sectionAdapter.getSections();
-        if (items == null || items.size() <= 0)
+    public void setGotoSectionAdapter(GotoSection gotoSection) {
+        sections = gotoSection.getSections();
+        if (sections == null || sections.size() <= 0)
             return;
 
-        sections = items;
         sectiondAdapter = new SectionAdapter(getContext(), sections);
         sectiondAdapter.setOnItemClickListener(this);
         gotoRecyclerView.setAdapter(sectiondAdapter);
-        setRecyclerViewPosition(0);
+        setGotoPosition(position);
     }
 
-    private void setRecyclerViewPosition(int position) {
+    public void refresh(GotoSection gotoSection) {
+        sections = gotoSection.getSections();
+        sectiondAdapter.refreshDataChange(sections);
+        setGotoPosition(position);
+    }
+
+    private void setGotoPosition(int position) {
         if (recyclerView != null) {
-            final String sectionName = ((GotoSection) recyclerView.getAdapter()).getCurrentSection(position);
+            this.position = position;
+            final int itemsCount = (recyclerView.getAdapter()).getItemCount();
+            if (itemsCount > 0 && position >= itemsCount)
+                this.position = (itemsCount - 1);
+            else if (itemsCount == 0)
+                this.position = 0;
+
+            final String sectionName = ((GotoSection) recyclerView.getAdapter()).getCurrentSection(this.position);
             setSectionSelected(sectionName);
         }
     }
@@ -133,7 +147,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     }
 
     private void setSectionSelected(String sectionName) {
-        if (sectionName == null || sectionName.trim().isEmpty()) {
+        if (sections == null && (sectionName == null || sectionName.trim().isEmpty())) {
             return;
         }
 
@@ -143,7 +157,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
                 continue;
             }
 
-            if (sectionItem.getSection().trim().equals(sectionName)) {
+            if (sectionItem.getSection().trim().equalsIgnoreCase(sectionName)) {
                 performSelectedSection(i);
                 gotoRecyclerView.smoothScrollToPosition(i);
                 break;
@@ -164,7 +178,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         super.onRestoreInstanceState(state);
         if(state != null && state instanceof SavedState){
             int position = ((SavedState) state).mScrollPosition;
-            setRecyclerViewPosition(position);
+            setGotoPosition(position);
         }
     }
 

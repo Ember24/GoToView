@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class SavedState extends android.view.View.BaseSavedState {
     public int mScrollPosition;
-    SavedState(Parcel in) {
+    private SavedState(Parcel in) {
         super(in);
         mScrollPosition = in.readInt();
     }

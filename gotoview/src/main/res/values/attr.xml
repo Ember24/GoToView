@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-        <attr name="goto_hasIcons" format="boolean" />
-        <attr name="goto_primaryColor" format="color" />
-        <attr name="goto_accentColor" format="color" />
-        <attr name="goto_textColor" format="color"  />
-        <attr name="goto_textSelectedColor" format="color"  />
-
+        <attr name="goto_radius" format="float"/>
+        <attr name="goto_color" format="color"/>
+        <attr name="goto_textColor" format="color"/>
+        <attr name="goto_SelectedColor" format="color"/>
+        <attr name="goto_textSelectedColor" format="color"/>
 </resources>

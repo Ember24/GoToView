@@ -1,6 +1,8 @@
 package com.ember24.gotolibrary.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +14,33 @@ import com.ember24.gotoview.Interface.GotoSection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by minimac on 04/03/2017.
  */
 public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharacterViewHolder>
     implements GotoSection{
-    private List<AnimeData> mDataArray;
+    private List<AnimeData> dataArray;
 
     public AnimeAdapter(List<AnimeData> dataSet) {
-        this.mDataArray = dataSet;
+        this.dataArray = dataSet;
+    }
+
+    public void refreshAdapter(List<AnimeData> data) {
+        this.dataArray = data;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (mDataArray == null)
+        if (dataArray == null)
             return 0;
-        return mDataArray.size();
+        return dataArray.size();
+    }
+
+    public List<AnimeData> getItems() {
+        return dataArray;
     }
 
     @Override
@@ -38,7 +50,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharact
 
     @Override
     public void onBindViewHolder(MovieCharacterViewHolder holder, int position) {
-        holder.bind(mDataArray.get(position), position);
+        holder.bind(dataArray.get(position), position);
     }
 
     @Override
@@ -46,10 +58,12 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharact
     {
         List<SectionItem> sections = new ArrayList<>();
         String sectionName = "";
-        for (int i = 0; i < mDataArray.size(); i++) {
-            if(sectionName != (mDataArray.get(i).movie)) {
-                sectionName = mDataArray.get(i).movie;
-                sections.add(new SectionItem(sectionName, i, false));
+        for (int i = 0; i < dataArray.size(); i++) {
+            if(!sectionName.equalsIgnoreCase(dataArray.get(i).movie)) {
+                sectionName = dataArray.get(i).movie;
+                sections.add(new SectionItem(sectionName, i));
+                //Get Random Color for each sections
+                //sections.add(new SectionItem(sectionName, i,getRandomColor()));
             }
         }
 
@@ -58,14 +72,19 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.MovieCharact
 
     @Override
     public String getCurrentSection(int pos) {
-        if (pos < 0 || pos >= mDataArray.size())
+        if (pos < 0 || pos >= dataArray.size())
             return null;
 
-        AnimeData data = mDataArray.get(pos);
+        AnimeData data = dataArray.get(pos);
         if (data == null)
             return null;
 
-        return mDataArray.get(pos).movie;
+        return dataArray.get(pos).movie;
+    }
+
+    private int getRandomColor() {
+        Random rnd = new Random();
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
     class MovieCharacterViewHolder extends RecyclerView.ViewHolder {

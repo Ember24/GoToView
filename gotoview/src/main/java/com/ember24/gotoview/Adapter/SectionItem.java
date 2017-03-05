@@ -13,20 +13,20 @@ public class SectionItem {
     @ColorInt
     private int color;
 
-    public SectionItem(String section, int position, boolean isActive)
+    public SectionItem(String section, int position)
     {
         this.section = section;
         this.position = position;
-        this.isActive = isActive;
+        this.isActive = false;
         this.color = -1;
     }
 
-    public SectionItem(String section, int position, @ColorInt int color, boolean isActive)
+    public SectionItem(String section, int position, @ColorInt int color)
     {
         this.section = section;
         this.position = position;
         this.color = color;
-        this.isActive = isActive;
+        this.isActive = false;
     }
 
     public String getSection() {

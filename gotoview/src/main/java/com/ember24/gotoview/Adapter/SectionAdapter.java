@@ -6,12 +6,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.ember24.gotoview.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,17 +22,19 @@ import java.util.List;
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionViewHolder> {
     private List<SectionItem> mDataArray;
     private OnItemClickListener listener;
+    private Context mContext;
 
     public SectionAdapter(Context context, List<SectionItem> dataSet) {
-        this.mDataArray = dataSet;
+        this.mContext = context;
+        this.mDataArray =  dataSet == null ? new ArrayList<SectionItem>() : dataSet;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public void refreshDataChange(List<SectionItem> newDataSet) {
-        this.mDataArray = newDataSet;
+    public void refreshDataChange(List<SectionItem> dataSet) {
+        this.mDataArray = dataSet == null ? new ArrayList<SectionItem>() : dataSet;
         notifyDataSetChanged();
     }
 
@@ -67,11 +71,16 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
             if (item == null || item.getSection() == null)
                 return;
 
+            TypedValue typedValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            int color = typedValue.data;
+
             GradientDrawable bgShape = (GradientDrawable) txtSection.getBackground();
+            bgShape.setCornerRadius(50f);
             if (item.getColor() == -1) {
-                bgShape.setColor(item.isActive() ? Color.RED : Color.TRANSPARENT);
-                bgShape.setStroke(3, Color.RED);
-                txtSection.setTextColor(item.isActive() ? Color.WHITE : Color.RED);
+                bgShape.setColor(item.isActive() ? color : Color.TRANSPARENT);
+                bgShape.setStroke(3, color);
+                txtSection.setTextColor(item.isActive() ? Color.WHITE : color);
             } else {
                 bgShape.setColor(item.isActive() ? item.getColor() : Color.TRANSPARENT);
                 bgShape.setStroke(3, item.getColor());
