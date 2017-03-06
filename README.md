@@ -13,12 +13,21 @@ How to use
     <com.ember24.gotoview.GoToView
         android:id="@+id/gotoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        goto:goto_radius="20"
+        goto:goto_stroke="5"
+        goto:goto_color="#d10404"
+        goto:goto_textColor="#d10404"
+        goto:goto_selectedColor="#0095ff"
+        goto:goto_textSelectedColor="#ffffff" />
 
 **Step 2:** set recycler view:
 
     GoToView goto = (GoToView) findViewById(R.id.gotoView);
     goto.setRecyclerView(dependantRecycleView);
+    
+    //if adapter has not been set, you will need to call the following method
+    goto.setGotoSectionAdapter();
 
 **Step 3:** make recyclerview's adapter implement GotoSection:
 
@@ -47,6 +56,10 @@ How to use
             return dataArray.get(pos).movie;
         }
     }
+    
+**Step 4:** (optional) refresh adapter after changing the dataset:
+
+    goto.refresh();
     
 License
 -------
