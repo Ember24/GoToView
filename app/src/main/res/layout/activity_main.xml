@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:goto="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +15,13 @@
     <com.ember24.gotoview.GoToView
         android:id="@+id/gotoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        goto:goto_radius="20"
+        goto:goto_stroke="5"
+        goto:goto_color="#d10404"
+        goto:goto_textColor="#d10404"
+        goto:goto_selectedColor="#0095ff"
+        goto:goto_textSelectedColor="#FFFFFF" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Adapter;
 import android.widget.FrameLayout;
 import com.ember24.gotoview.Adapter.SectionAdapter;
 import com.ember24.gotoview.Adapter.SectionItem;
@@ -147,7 +148,9 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
 
     public void setTextSelectedColor(int textSelectedColor) {
         this.mTextSelectedColor = textSelectedColor;
-        if (this.sectiondAdapter != null) sectiondAdapter.notifyDataSetChanged();
+        if (this.sectiondAdapter != null && this.rvAttached != null) {
+            sectiondAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -177,25 +180,28 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
             }
         });
 
-        RecyclerView.Adapter adapter = this.rvAttached.getAdapter();
-        if (adapter != null && adapter instanceof GotoSection) {
-            setGotoSectionAdapter((GotoSection) adapter);
+        setGotoSectionAdapter();
+    }
+
+    public void setGotoSectionAdapter() {
+        RecyclerView.Adapter adapter = rvAttached.getAdapter();
+        if (adapter instanceof GotoSection) {
+            sections = ((GotoSection)adapter).getSections();
+            sectiondAdapter = new SectionAdapter(sections, this);
+            sectiondAdapter.setOnItemClickListener(this);
+            gotoRecyclerView.setAdapter(sectiondAdapter);
+            setRecyclerViewPosition(rvPosition);
         }
     }
 
-    public void setGotoSectionAdapter(GotoSection gotoSection) {
-        sections = gotoSection.getSections();
-        sectiondAdapter = new SectionAdapter(sections,this);
-        sectiondAdapter.setOnItemClickListener(this);
-        gotoRecyclerView.setAdapter(sectiondAdapter);
-        setRecyclerViewPosition(rvPosition);
-    }
-
-    public void refresh(GotoSection gotoSection) {
-        sections = gotoSection.getSections();
-        sectiondAdapter.refreshDataChange(sections);
-        setRecyclerViewPosition(rvPosition);
-        gotoRecyclerView.refreshDrawableState();
+    public void refresh() {
+        RecyclerView.Adapter adapter = rvAttached.getAdapter();
+        if (adapter instanceof GotoSection) {
+            sections = ((GotoSection) adapter).getSections();
+            sectiondAdapter.refreshDataChange(sections);
+            setRecyclerViewPosition(rvPosition);
+            gotoRecyclerView.refreshDrawableState();
+        }
     }
 
     @Override
