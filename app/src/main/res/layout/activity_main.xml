@@ -15,13 +15,7 @@
     <com.ember24.gotoview.GoToView
         android:id="@+id/gotoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        goto:goto_radius="20"
-        goto:goto_stroke="5"
-        goto:goto_color="#d10404"
-        goto:goto_textColor="#d10404"
-        goto:goto_selectedColor="#0095ff"
-        goto:goto_textSelectedColor="#FFFFFF" />
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,6 +23,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabAdd"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -37,16 +32,15 @@
             android:layout_margin="16dp"
             android:clickable="true"
             android:background="@color/colorFabAdd"
-            android:backgroundTint="@color/colorFabAdd"
             android:src="@android:drawable/ic_input_add"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabRemove"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:background="@color/colorFabRemove"
-            android:backgroundTint="@color/colorFabRemove"
             android:src="@android:drawable/ic_delete"
             android:layout_marginBottom="16dp"
             android:layout_alignParentBottom="true"
