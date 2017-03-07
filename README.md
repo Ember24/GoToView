@@ -2,6 +2,10 @@ Goto View
 -----
 The goto view is an open source android library that create different section tags from a recyclerview. The section tags allow for fast browsing through the recyclerview.
 
+Requirements
+-----
+The library requires Android **API Level 9+**.
+
 Dependency
 -----
     repositories {
@@ -18,7 +22,7 @@ Screenshots
 -----
 ![](https://github.com/Ember24/GotoView/blob/master/screenshots/screenshot_1.png?raw=true) ![](https://github.com/Ember24/GotoView/blob/master/screenshots/screenshot_2.png?raw=true)
 
-How to use
+Usage
 -----
 **Step 1:** add this to your layout XML:
 
@@ -69,9 +73,14 @@ How to use
         }
     }
     
-**Step 4:** (optional) refresh adapter after changing the dataset:
+**Important:** refresh adapter after changing the recyclerview's dataset:
 
     goto.refresh();
+
+Credits
+------
+- Used [mustafasevgi/RecyclerViewPositionHelper.java](https://gist.github.com/mustafasevgi/7dcb18166aaf9944e6450ec2878a646a)
+- Based on [viethoa/recyclerview-alphabet-fast-scroller-android](https://github.com/viethoa/recyclerview-alphabet-fast-scroller-android)
     
 License
 -------
