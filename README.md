@@ -2,6 +2,18 @@ Goto View
 -----
 The goto view is an open source android library that create different section tags from a recyclerview. The section tags allow for fast browsing through the recyclerview.
 
+Dependency
+-----
+    repositories {
+        maven {
+            url  "http://ember24.bintray.com/maven"
+        }
+    }
+    
+    dependencies {
+        compile 'com.ember24.gotoview:goto-view:0.1.2'
+    }
+
 Screenshots
 -----
 ![](https://github.com/Ember24/GotoView/blob/master/screenshots/screenshot_1.png?raw=true) ![](https://github.com/Ember24/GotoView/blob/master/screenshots/screenshot_2.png?raw=true)
