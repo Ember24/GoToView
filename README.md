@@ -29,13 +29,7 @@ Usage
     <com.ember24.gotoview.GoToView
         android:id="@+id/gotoView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        goto:goto_radius="20"
-        goto:goto_stroke="5"
-        goto:goto_color="#d10404"
-        goto:goto_textColor="#d10404"
-        goto:goto_selectedColor="#0095ff"
-        goto:goto_textSelectedColor="#ffffff" />
+        android:layout_height="wrap_content"/>
 
 **Step 2:** set recycler view:
 
@@ -76,6 +70,21 @@ Usage
 **Important:** refresh adapter after changing the recyclerview's dataset:
 
     goto.refresh();
+
+Attributes
+------
+The following xml tag contains all attributes that can currently be set
+
+    <com.ember24.gotoview.GoToView
+        android:id="@+id/gotoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        goto:goto_radius="20"
+        goto:goto_stroke="5"
+        goto:goto_color="#d10404"
+        goto:goto_textColor="#d10404"
+        goto:goto_selectedColor="#0095ff"
+        goto:goto_textSelectedColor="#ffffff" />
 
 Credits
 ------
