@@ -18,9 +18,14 @@ android {
         }
     }
 }
-
+repositories {
+    maven {
+        url  "http://ember24.bintray.com/maven"
+    }
+}
 dependencies {
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    //compile 'com.ember24.gotoview:goto-view:0.1.2'
     compile project(':gotoview')
 }

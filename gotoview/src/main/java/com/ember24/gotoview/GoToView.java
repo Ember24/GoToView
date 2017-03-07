@@ -184,6 +184,8 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     }
 
     public void setGotoSectionAdapter() {
+        if (rvAttached == null)
+            return;
         RecyclerView.Adapter adapter = rvAttached.getAdapter();
         if (adapter instanceof GotoSection) {
             sections = ((GotoSection)adapter).getSections();
@@ -195,6 +197,8 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     }
 
     public void refresh() {
+        if (rvAttached == null)
+            return;
         RecyclerView.Adapter adapter = rvAttached.getAdapter();
         if (adapter instanceof GotoSection) {
             sections = ((GotoSection) adapter).getSections();
@@ -212,17 +216,18 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     }
 
     private void setRecyclerViewPosition(int position) {
-        if (rvAttached != null) {
-            this.rvPosition = position;
-            final int itemsCount = (rvAttached.getAdapter()).getItemCount();
-            if (itemsCount > 0 && this.rvPosition >= itemsCount)
-                this.rvPosition = (itemsCount - 1);
-            else if (itemsCount == 0)
-                this.rvPosition = 0;
+        if (rvAttached == null)
+            return;
 
-            final String sectionName = ((GotoSection) rvAttached.getAdapter()).getCurrentSection(this.rvPosition);
-            setSectionSelected(sectionName);
-        }
+        this.rvPosition = position;
+        final int itemsCount = (rvAttached.getAdapter()).getItemCount();
+        if (itemsCount > 0 && this.rvPosition >= itemsCount)
+            this.rvPosition = (itemsCount - 1);
+        else if (itemsCount == 0)
+            this.rvPosition = 0;
+
+        final String sectionName = ((GotoSection) rvAttached.getAdapter()).getCurrentSection(this.rvPosition);
+        setSectionSelected(sectionName);
     }
 
     private void performSelectedSection() {
