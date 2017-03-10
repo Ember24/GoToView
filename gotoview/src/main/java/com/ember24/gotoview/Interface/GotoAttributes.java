@@ -9,6 +9,7 @@ import android.support.annotation.ColorInt;
 public interface GotoAttributes {
     float getRadius();
     int getStroke();
+    boolean getFillColor();
     @ColorInt int getColor();
     @ColorInt  int getTextColor();
     @ColorInt int getSelectedColor();

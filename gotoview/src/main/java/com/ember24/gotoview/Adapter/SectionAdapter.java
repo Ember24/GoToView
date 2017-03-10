@@ -83,11 +83,15 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.SectionV
             int textSelectedColor = item.getTextSelectedColor() != SectionItem.NO_COLOR_OVERRIDE ? item.getTextSelectedColor() : attr.getTextSelectedColor();
 
             GradientDrawable bgShape = (GradientDrawable) txtSection.getBackground();
+            if (attr.getFillColor())
+                bgShape.setColor(item.isActive() ? selectedColor : color);
+            else
+                bgShape.setColor(item.isActive() ? selectedColor : Color.TRANSPARENT);
+
             bgShape.setCornerRadius(attr.getRadius());
-            bgShape.setColor(item.isActive() ? selectedColor : Color.TRANSPARENT);
             bgShape.setStroke(attr.getStroke(), item.isActive() ? selectedColor : color);
             txtSection.setTextColor(item.isActive() ? textSelectedColor : textColor);
-            txtSection.setTextSize(TypedValue.COMPLEX_UNIT_PX,attr.getTextSize());
+            txtSection.setTextSize(TypedValue.COMPLEX_UNIT_PX, attr.getTextSize() + (item.isActive() ? 10 : 0));
 
             txtSection.setText(item.getSection());
             txtSection.setTypeface(null, item.isActive() ? Typeface.BOLD : Typeface.NORMAL);

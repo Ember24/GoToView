@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.annotation.BoolRes;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.widget.Adapter;
 import android.widget.FrameLayout;
 import com.ember24.gotoview.Adapter.SectionAdapter;
 import com.ember24.gotoview.Adapter.SectionItem;
+import com.ember24.gotoview.Helper.ColorHelper;
 import com.ember24.gotoview.Helper.RecyclerViewPositionHelper;
 import com.ember24.gotoview.Helper.SavedState;
 import com.ember24.gotoview.Interface.GotoAttributes;
@@ -42,6 +44,7 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
     private float mRadius;
     private int mTextSize;
     private int mStroke;
+    private boolean mFillColor;
     private @ColorInt int mColor;
     private @ColorInt int mTextColor;
     private @ColorInt int mSelectedColor;
@@ -79,14 +82,14 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int colorPrimary = typedValue.data;
-
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.GotoView, defStyleAttr, 0);
+        mFillColor = attr.getBoolean(R.styleable.GotoView_goto_fill_color, false);
         mRadius = attr.getFloat(R.styleable.GotoView_goto_radius, 50f);
         mStroke = attr.getInteger(R.styleable.GotoView_goto_stroke, 3);
         mColor = attr.getColor(R.styleable.GotoView_goto_color, colorPrimary);
-        mSelectedColor = attr.getColor(R.styleable.GotoView_goto_selectedColor, mColor);
-        mTextColor = attr.getColor(R.styleable.GotoView_goto_textColor, mColor);
-        mTextSelectedColor = attr.getColor(R.styleable.GotoView_goto_textSelectedColor, Color.WHITE);
+        mSelectedColor = attr.getColor(R.styleable.GotoView_goto_selectedColor, colorPrimary);
+        mTextColor = attr.getColor(R.styleable.GotoView_goto_textColor, mFillColor ? ColorHelper.isColorDark(mColor) ? Color.WHITE : Color.BLACK :mColor);
+        mTextSelectedColor = attr.getColor(R.styleable.GotoView_goto_textSelectedColor, ColorHelper.isColorDark(mSelectedColor) ? Color.WHITE : Color.BLACK);
         mTextSize = context.getResources().getDimensionPixelSize(R.dimen.material_text_body);
 
         attr.recycle();
@@ -99,6 +102,15 @@ public class GoToView extends FrameLayout implements SectionAdapter.OnItemClickL
 
     public void setRadius(float radius) {
         this.mRadius = radius;
+    }
+
+    @Override
+    public boolean getFillColor() {
+        return mFillColor;
+    }
+
+    public void setFillColor(boolean fillColor) {
+        this.mFillColor = fillColor;
     }
 
     @Override

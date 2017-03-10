@@ -3,6 +3,7 @@
         <declare-styleable name="GotoView">
                 <attr name="goto_radius" format="float"/>
                 <attr name="goto_stroke" format="integer"/>
+                <attr name="goto_fill_color" format="boolean"/>
                 <attr name="goto_color" format="color"/>
                 <attr name="goto_textColor" format="color"/>
                 <attr name="goto_selectedColor" format="color"/>
